@@ -27,15 +27,14 @@ def Save_MS_Images(image, sample, dirpath, name):
     dst_ds = driver.Create(name, tableshape[1], tableshape[0], 1, gdal.GDT_Int32,[ 'COMPRESS=LZW' ])
     dst_ds.SetGeoTransform(geotr) # Setting Geotransform
     dst_ds.SetProjection(proj) # Setting Projection
-    try:
-        if image.shape[2] == 3:
-            dst_ds = driver.Create(name, tableshape[1], tableshape[0], 3, gdal.GDT_Int32,[ 'COMPRESS=LZW' ])
-            dst_ds.SetGeoTransform(geotr) # Setting Geotransform
-            dst_ds.SetProjection(proj) # Setting Projection
-            dst_ds.GetRasterBand(1).WriteArray(image[:,:,0]) # Writing band
-            dst_ds.GetRasterBand(2).WriteArray(image[:,:,1]) # Writing band
-            dst_ds.GetRasterBand(3).WriteArray(image[:,:,2]) # Writing band
-    except:
+    if image.ndim == 3:
+        dst_ds = driver.Create(name, tableshape[1], tableshape[0], 3, gdal.GDT_Int32,[ 'COMPRESS=LZW' ])
+        dst_ds.SetGeoTransform(geotr) # Setting Geotransform
+        dst_ds.SetProjection(proj) # Setting Projection
+        dst_ds.GetRasterBand(1).WriteArray(image[:,:,0]) # Writing band
+        dst_ds.GetRasterBand(2).WriteArray(image[:,:,1]) # Writing band
+        dst_ds.GetRasterBand(3).WriteArray(image[:,:,2]) # Writing band
+    else:
         dst_ds = driver.Create(name, tableshape[1], tableshape[0], 1, gdal.GDT_Int32,[ 'COMPRESS=LZW' ])
         dst_ds.SetGeoTransform(geotr) # Setting Geotransform
         dst_ds.SetProjection(proj) # Setting Projection
